@@ -1,6 +1,5 @@
 import React from "react";
 import logo from "./logo.svg";
-import "../css/app.css";
 import Container from "@mui/material/Container";
 import { Box, Stack, Typography } from "@mui/material";
 import Button from "@mui/material/Button";
@@ -13,6 +12,9 @@ import { HelpPage } from "./screens/helpPage";
 import { HomeNavbar } from "./components/headers/HomeNavbar";
 import { OtherNavbar } from "./components/headers/OtherNavbar";
 import { Footer } from "./components/footer";
+import "../css/app.css";
+import "../css/navbar.css";
+
 function App() {
   const location = useLocation();
 
@@ -28,6 +30,9 @@ function App() {
         </Route>
         <Route path="/member-page">
           <UserPage />
+        </Route>
+        <Route path="/help">
+          <HelpPage />
         </Route>
         <Route path="/">
           <HomePage />
