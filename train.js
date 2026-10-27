@@ -1,11 +1,21 @@
-// TASK - Y
-
-function findIntersection(arr1, arr2) {
-  return arr1.filter((value) => arr2.includes(value));
+// TASK - Z
+function sumEvens(numbers) {
+  return numbers
+    .filter((number) => number % 2 === 0)
+    .reduce((sum, number) => sum + number, 0);
 }
 
-console.log(findIntersection(["apple", "banana", "cherry"], ["cherry", "banana", "grape"]));
-// ["banana", "cherry"]
+console.log(sumEvens([1, 2, 3])); // 2
+
+
+// TASK - Y
+
+// function findIntersection(arr1, arr2) {
+//   return arr1.filter((value) => arr2.includes(value));
+// }
+
+// console.log(findIntersection(["apple", "banana", "cherry"], ["cherry", "banana", "grape"]));
+// // ["banana", "cherry"]
 
 
 
