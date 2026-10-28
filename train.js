@@ -6,7 +6,7 @@ function sumEvens(numbers) {
 }
 
 console.log(sumEvens([1, 2, 3])); // 2
-
+// TESTSTSETSTESTETSETTSTETE
 
 // TASK - Y
 
