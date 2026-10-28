@@ -10,8 +10,8 @@ import {
   THEME_ID as MATERIAL_THEME_ID,
   ThemeProvider,
 } from "@mui/material/styles";
+import { BrowserRouter as Router } from "react-router-dom";
 import theme from "./app/MaterialTheme";
-import reportWebVitals from "./reportWebVitals";
 import "./css/index.css";
 
 const container = document.getElementById("root");
