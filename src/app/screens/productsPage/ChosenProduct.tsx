@@ -1,13 +1,17 @@
 import { useRef, useState } from "react";
 import { Box, Button, Container, Stack } from "@mui/material";
 import { useParams, Link } from "react-router-dom";
-import type { Swiper as SwiperInstance } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 import Rating from "@mui/material/Rating";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import { addCartItem } from "../../../lib/data/cart";
 import { menuProducts } from "./Products";
 import "swiper/css";
+
+type SwiperInstance = {
+  slidePrev: () => void;
+  slideNext: () => void;
+};
 
 export default function ChosenProduct() {
   const { productId } = useParams<{ productId: string }>();
