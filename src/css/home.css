@@ -243,3 +243,99 @@
   transform: scale(1.5);
   overflow: hidden;
 }
+
+/* ACTIVE USERS */
+
+.homepage .active-users-frame {
+  width: 100%;
+  min-height: 380px;
+  display: flex;
+  background: #f8f8ff;
+}
+
+.homepage .active-users-frame .main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 48px;
+}
+
+.homepage .active-users-frame .category-title {
+  text-align: center;
+  font-family: "Roboto Serif", serif;
+  font-size: 28px;
+  font-weight: 600;
+  line-height: normal;
+}
+
+.homepage .active-users-frame .cards-frame {
+  width: 100%;
+  max-width: 930px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 12px;
+  margin: 34px auto 32px;
+}
+
+.homepage .active-users-frame .cards-frame .card {
+  flex: 1 1 0;
+  min-width: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: 9px;
+  background: #fff;
+  box-shadow: none;
+}
+
+.homepage .active-users-frame .cards-frame .member-image {
+  padding: 0;
+}
+
+.homepage .active-users-frame .cards-frame .member-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.homepage .active-users-frame .cards-frame .member-nickname {
+  min-height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3px 8px;
+  background: #fff;
+  text-align: center;
+}
+
+.homepage .active-users-frame .cards-frame .member-nickname > * {
+  color: #171717;
+  font-family: "Roboto Serif", serif;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.homepage .active-users-frame .cards-frame .no-data {
+  width: 100%;
+  padding: 32px 16px;
+  color: #555;
+  text-align: center;
+}
+
+@media (max-width: 700px) {
+  .homepage .active-users-frame .cards-frame {
+    max-width: 500px;
+    flex-wrap: wrap;
+  }
+
+  .homepage .active-users-frame .cards-frame .card {
+    flex: 1 1 calc(50% - 12px);
+  }
+}
+
+@media (max-width: 420px) {
+  .homepage .active-users-frame .cards-frame .card {
+    flex-basis: 100%;
+  }
+}
