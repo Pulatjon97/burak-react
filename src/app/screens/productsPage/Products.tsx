@@ -5,7 +5,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import { addCartItem } from "../../../lib/data/cart";
 import "../../../css/products.css";
 
-type MenuProduct = {
+export type MenuProduct = {
   id: string;
   name: string;
   category: string;
@@ -13,7 +13,7 @@ type MenuProduct = {
   image: string;
 };
 
-const menuProducts: MenuProduct[] = [
+export const menuProducts: MenuProduct[] = [
   {
     id: "korean-spicy-soup",
     name: "Korean Spicy Soup",
