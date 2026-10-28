@@ -13,6 +13,7 @@ export default function HomePage() {
       <Statistics />
       <PopularDishes />
       <NewDishes />
+      <div className="advertisement-gap" aria-hidden="true" />
       <Advertisement />
       <ActiveUsers />
       <Events />

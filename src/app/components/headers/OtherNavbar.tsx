@@ -12,7 +12,7 @@ export default function OtherNavbar() {
         <Stack className="menu">
           <Box>
             <NavLink to="/">
-              <img className="brand-logo" src="/icons/burak.svg" />
+              <img className="brand-logo" src="/icons/burak.svg" alt="Burak" />
             </NavLink>
           </Box>
           <Stack className="links">
@@ -59,6 +59,7 @@ export default function OtherNavbar() {
               <img
                 className="user-avatar"
                 src={"/icons/default-user.svg"}
+                alt="User profile"
                 aria-haspopup={"true"}
               />
             )}
