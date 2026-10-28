@@ -6,8 +6,7 @@ function sumEvens(numbers) {
 }
 
 console.log(sumEvens([1, 2, 3])); // 2
-// TESTSTSETSTESTETSETTSTETE
-
+// TEST 2
 // TASK - Y
 
 // function findIntersection(arr1, arr2) {
