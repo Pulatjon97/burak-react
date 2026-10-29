@@ -4,7 +4,8 @@ import { NavLink } from "react-router-dom";
 import Basket from "./Basket";
 
 export default function OtherNavbar() {
-  const authMember = null;
+  // const authMember = null;
+  const authMember = { id: "1", name: "Justin" };
 
   return (
     <div className="other-navbar">

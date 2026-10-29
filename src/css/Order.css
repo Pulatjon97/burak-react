@@ -1,0 +1,341 @@
+.orders-page {
+  box-sizing: border-box;
+  min-height: 690px;
+  padding: 28px 20px 64px;
+  background: #f8f8ff;
+}
+
+.orders-page,
+.orders-page * {
+  box-sizing: border-box;
+}
+
+.orders-page-container.MuiContainer-root {
+  display: grid;
+  grid-template-columns: minmax(0, 530px) 240px;
+  align-items: start;
+  gap: 34px;
+  max-width: 850px;
+  padding: 0;
+}
+
+.orders-main-column {
+  min-width: 0;
+}
+
+.orders-tabs.MuiTabs-root {
+  min-height: 36px;
+  border-bottom: 1px solid #dedee4;
+}
+
+.orders-tabs .MuiTabs-indicator {
+  height: 2px;
+  background: #343434;
+}
+
+.orders-tabs .MuiTab-root {
+  min-width: 0;
+  min-height: 36px;
+  padding: 0 12px 8px;
+  color: #d7b686;
+  font-family: "Poppins", sans-serif;
+  font-size: 11px;
+  font-weight: 400;
+  line-height: 1.2;
+  text-transform: none;
+}
+
+.orders-tabs .MuiTab-root.Mui-selected {
+  color: #343434;
+}
+
+.orders-content {
+  padding-top: 16px;
+}
+
+.orders-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.order-card,
+.orders-profile-card,
+.orders-payment-card {
+  border: 1px solid #dcdeee;
+  border-radius: 12px;
+  background: #f8f8ff;
+  box-shadow: 0 5px 9px rgba(0, 0, 0, 0.22), inset 0 0 14px rgba(168, 168, 204, 0.65);
+}
+
+.order-card {
+  min-height: 158px;
+  padding: 12px 14px 10px;
+}
+
+.order-product-list {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.order-product-row {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) auto;
+  align-items: center;
+  min-height: 28px;
+  column-gap: 9px;
+  color: #151515;
+  font-family: "Poppins", sans-serif;
+  font-size: 13px;
+}
+
+.order-product-image {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+}
+
+.order-product-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.order-product-calculation {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #4f5360;
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.order-product-calculation span {
+  color: #687184;
+  font-size: 15px;
+}
+
+.order-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 10px;
+  padding-left: 5px;
+}
+
+.order-totals {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: #303039;
+  font-size: 9px;
+  white-space: nowrap;
+}
+
+.order-totals strong {
+  font-size: 9px;
+  font-weight: 600;
+}
+
+.order-totals .total-symbol {
+  color: #687184;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.order-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.order-actions .MuiButton-root {
+  min-width: 0;
+  padding: 4px 10px;
+  border-radius: 7px;
+  color: white;
+  font-family: "Poppins", sans-serif;
+  font-size: 9px;
+  line-height: 1.4;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.order-actions .order-cancel-button {
+  background: #d7b686;
+}
+
+.order-actions .order-payment-button {
+  background: #69b65d;
+}
+
+.order-actions .order-verify-button {
+  background: #398bd0;
+}
+
+.order-time {
+  color: #353535;
+  font-size: 9px;
+  white-space: nowrap;
+}
+
+.order-empty-state {
+  display: grid;
+  min-height: 330px;
+  place-items: center;
+}
+
+.order-empty-state img {
+  display: block;
+  width: min(220px, 75%);
+  height: auto;
+}
+
+.orders-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding-top: 52px;
+}
+
+.orders-profile-card {
+  overflow: hidden;
+  min-height: 198px;
+  padding: 14px 12px 0;
+}
+
+.orders-profile-summary {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 148px;
+}
+
+.orders-avatar {
+  width: 76px;
+  height: 76px;
+  margin-bottom: 4px;
+  border-radius: 22px;
+  object-fit: cover;
+}
+
+.orders-profile-summary strong {
+  color: #141414;
+  font-family: "Roboto Serif", Georgia, serif;
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.orders-profile-summary > span {
+  margin-top: 1px;
+  color: #999;
+  font-size: 13px;
+  text-transform: uppercase;
+}
+
+.orders-address {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 36px;
+  border-top: 1px solid #aaa;
+  color: #343434;
+  font-size: 11px;
+}
+
+.orders-address .MuiSvgIcon-root {
+  color: #263759;
+  font-size: 17px;
+}
+
+.orders-payment-card {
+  padding: 14px 10px 12px;
+}
+
+.payment-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+.payment-field {
+  overflow: hidden;
+  min-height: 26px;
+  padding: 5px 6px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  color: #6d6d6d;
+  font-size: 9px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.payment-field-wide {
+  grid-column: 1 / -1;
+}
+
+.payment-logos {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  gap: 8px;
+  margin-top: 22px;
+}
+
+.payment-logos img {
+  display: block;
+  width: 26px;
+  height: 18px;
+  object-fit: contain;
+}
+
+@media (max-width: 760px) {
+  .orders-page {
+    min-height: 0;
+    padding: 24px 16px 48px;
+  }
+
+  .orders-page-container.MuiContainer-root {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .orders-sidebar {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    padding-top: 0;
+  }
+
+  .order-card-footer {
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 520px) {
+  .orders-tabs .MuiTab-root {
+    padding-right: 7px;
+    padding-left: 7px;
+    font-size: 10px;
+  }
+
+  .order-card {
+    padding: 10px;
+  }
+
+  .order-card-footer {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .order-totals {
+    flex-wrap: wrap;
+  }
+
+  .orders-sidebar {
+    grid-template-columns: 1fr;
+  }
+}
