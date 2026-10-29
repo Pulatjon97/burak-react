@@ -1,4 +1,5 @@
 import { Box, Button } from "@mui/material";
+import moment from "moment";
 import type { Order } from "./orderTypes";
 
 type OrderCardProps = {
@@ -11,6 +12,7 @@ export default function OrderCard({ order, status }: OrderCardProps) {
     (sum, product) => sum + product.unitPrice * product.quantity,
     0,
   );
+  const orderTime = moment(order.placedAt).format("YY-MM-DD HH:mm");
 
   return (
     <Box className="order-card" aria-label={`Order ${order.id}`}>
@@ -39,6 +41,10 @@ export default function OrderCard({ order, status }: OrderCardProps) {
           <strong>${subtotal + order.deliveryCost}</strong>
         </div>
 
+        <time className="order-time" dateTime={moment(order.placedAt).toISOString()}>
+          {orderTime}
+        </time>
+
         {status === "paused" && (
           <div className="order-actions">
             <Button className="order-cancel-button" variant="contained">Cancel</Button>
@@ -47,7 +53,6 @@ export default function OrderCard({ order, status }: OrderCardProps) {
         )}
         {status === "process" && (
           <div className="order-actions">
-            <time className="order-time">{order.placedAt}</time>
             <Button className="order-verify-button" variant="contained">Verify to fulfil</Button>
           </div>
         )}
