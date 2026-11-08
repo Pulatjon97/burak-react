@@ -2,26 +2,27 @@ import { Box, Container, Stack } from "@mui/material";
 import Button from "@mui/material/Button";
 import { NavLink } from "react-router-dom";
 import Basket from "./Basket";
+import React, { useState } from "react";
 
 export default function HomeNavbar() {
   const authMember = null;
+
+  const [count, setCount] = useState(0);
+
+  const buttonHandler = () => {
+    setCount(count + 1);
+  };
+
   return (
     <div className="home-navbar">
       <Container className="navbar-container">
-        <Stack
-          className="menu"
-        >
+        <Stack className="menu">
           <Box>
             <NavLink to="/">
-              <img
-              className="brand-logo"
-                src="/icons/burak.svg"
-              />
+              <img className="brand-logo" src="/icons/burak.svg" />
             </NavLink>
           </Box>
-          <Stack
-           className="links"
-          >
+          <Stack className="links">
             <Box className={"hover-line"}>
               <NavLink to="/" activeClassName="underline">
                 Home
@@ -57,10 +58,7 @@ export default function HomeNavbar() {
 
             {!authMember ? (
               <Box>
-                <Button
-                  variant="contained"
-                  className="login-button"
-                >
+                <Button variant="contained" className="login-button">
                   Login
                 </Button>
               </Box>
@@ -74,18 +72,28 @@ export default function HomeNavbar() {
           </Stack>
         </Stack>
         <Stack className={"header-frame"}>
-            <Stack className={"detail"}>
-                <Box className={"head-main-txt"}>World's the Most Delicious Cousine</Box>
-                <Box className={"wel-txt"}>The Choice, not just a choice!</Box>
-                <Box className={"service-txt"}>24 hours service</Box>
-                <Box className={"signup"}>
-                    {!authMember ? (<Button variant={"contained"} className="signup-button">SIGN UP</Button>) : null}
-                </Box>
-            </Stack>
-
-            <Box className="logo-frame">
-                <div className="logo-img"></div>
+          <Stack className={"detail"}>
+            <Box className={"head-main-txt"}>
+              World's the Most Delicious Cousine
             </Box>
+            <Box className={"wel-txt"}>The Choice, not just a choice!</Box>
+            <Box className={"service-txt"}>{count} hours service</Box>
+            <Box className={"signup"}>
+              {!authMember ? (
+                <Button
+                  variant={"contained"}
+                  className="signup-button"
+                  onClick={buttonHandler}
+                >
+                  SIGN UP
+                </Button>
+              ) : null}
+            </Box>
+          </Stack>
+
+          <Box className="logo-frame">
+            <div className="logo-img"></div>
+          </Box>
         </Stack>
       </Container>
     </div>
