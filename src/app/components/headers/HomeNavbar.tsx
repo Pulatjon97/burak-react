@@ -2,15 +2,25 @@ import { Box, Container, Stack } from "@mui/material";
 import Button from "@mui/material/Button";
 import { NavLink } from "react-router-dom";
 import Basket from "./Basket";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 export default function HomeNavbar() {
   const authMember = null;
+  const [count, setCount] = useState<number>(0);
+  const [value, setvalue] = useState<boolean>(true);
 
-  const [count, setCount] = useState(0);
+  useEffect(() => {
+    console.log("componentDidMount", count); //DATA FETCH FROM BACKEND
+    setCount(count + 1);
+    return () => {
+      console.log("componentWillUnmount");
+    }
+  }, [value]);
+
+  /** HANDLERS */
 
   const buttonHandler = () => {
-    setCount(count + 1);
+    setvalue(!value);
   };
 
   return (
