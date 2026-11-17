@@ -49,7 +49,15 @@ export default function ActiveUsers() {
                     >
                       <CardOverflow className="member-image">
                         <AspectRatio ratio={1.1}>
-                          <img src={imagePath} alt={member.memberNick} />
+                          <img
+                            src={imagePath}
+                            alt={member.memberNick}
+                            className={
+                              member.memberNick === "Kim Jun Sang"
+                                ? "member-image-kim"
+                                : undefined
+                            }
+                          />
                         </AspectRatio>
                       </CardOverflow>
 
