@@ -24,9 +24,9 @@ const popularDishesRetriever = createSelector(
 
 export default function PopularDishes() {
   const { popularDishes } = useSelector(popularDishesRetriever);
-  console.log("popularDishes: ", popularDishes);
+  // console.log("popularDishes: ", popularDishes);
 
-
+ 
   return (
     <div className="popular-dishes-frame">
       <Container>
@@ -35,16 +35,16 @@ export default function PopularDishes() {
 
           <Stack className="cards-frame">
             {popularDishes.length !== 0 ? (
-              popularDishes.map((ele: Product) => {
-                const imagePath = ele.productImages?.[0]
-                  ? `${serverApi}/${ele.productImages[0]}`
+              popularDishes.map((product: Product) => {
+                const imagePath = product.productImages?.[0]
+                  ? `${serverApi}/${product.productImages[0]}`
                   : "";
 
                 return (
-                  <CssVarsProvider key={ele._id}>
+                  <CssVarsProvider key={product._id}>
                     <Card className={"card"}>
                     <CardCover>
-                      <img src={imagePath} alt={ele.productName} />
+                      <img src={imagePath} alt={product.productName} />
                     </CardCover>
 
                     <CardCover className="card-cover" />
@@ -63,7 +63,7 @@ export default function PopularDishes() {
                           textColor="#fff"
                           mb={1}
                         >
-                          {ele.productName}
+                          {product.productName}
                         </Typography>
 
                         <Typography
@@ -74,7 +74,7 @@ export default function PopularDishes() {
                             fontWeight: "md",
                           }}
                         >
-                          {ele.productViews ?? 0}
+                          {product.productViews ?? 0}
                           <VisibilityIcon
                             sx={{ fontSize: 25, marginLeft: "5px" }}
                           />
@@ -97,7 +97,7 @@ export default function PopularDishes() {
                         startDecorator={<DescriptionOutlinedIcon />}
                         textColor="neutral.300"
                       >
-                        {ele.productDesc}
+                        {product.productDesc}
                       </Typography>
                     </CardOverflow>
                     </Card>

@@ -8,14 +8,24 @@ import { CssVarsProvider } from "@mui/joy/styles";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import Divider from "../../components/divider";
 
-const newDishes = [
-  { productName: "Cutlet", imagePath: "/img/cutlet.webp" },
-  { productName: "Kebab", imagePath: "/img/kebab-fresh.webp" },
-  { productName: "Lavash", imagePath: "/img/lavash.webp" },
-  { productName: "Kebab", imagePath: "/img/kebab.webp" },
-];
+import { useSelector } from "react-redux";
+import { createSelector } from "reselect";
+import { retrieveNewDishes } from "./selector";
+import { serverApi } from "../../../lib/config";
+import { Product } from "../../../lib/types/product";
+import { ProductCollection } from "../../../lib/enums/product.enum";
+
+/** REDUX SLICE & SELECTOR */
+
+const newDishesRetriever = createSelector(retrieveNewDishes, (newDishes) => ({
+  newDishes,
+}));
 
 export default function NewDishes() {
+  const { newDishes } = useSelector(newDishesRetriever);
+
+  console.log("newDishes:", newDishes);
+
   return (
     <div className="new-products-frame">
       <Container>
@@ -24,30 +34,55 @@ export default function NewDishes() {
 
           <Stack className="cards-frame">
             <CssVarsProvider>
-              {newDishes.map((dish) => (
-                <Card
-                  key={dish.imagePath}
-                  variant="outlined"
-                  className="card"
-                >
-                  <CardOverflow className="image-frame">
-                    <Box className="product-sale">Normal size</Box>
-                    <AspectRatio ratio="1">
-                      <img src={dish.imagePath} alt={dish.productName} />
-                    </AspectRatio>
-                  </CardOverflow>
+              {newDishes.length !== 0 ? (
+                newDishes.map((product: Product) => {
+                  const imagePath = product.productImages?.[0]
+                    ? `${serverApi}/${product.productImages[0]}`
+                    : "";
+                  const sizeVolume =
+                    product.productCollection === ProductCollection.DRINK
+                      ? product.productVolume
+                        ? `${product.productVolume}l`
+                        : ""
+                      : product.productSize
+                        ? `${product.productSize} size`
+                        : "Normal size";
+                  return (
+                    <Card key={product._id} variant="outlined" className="card">
+                      <CardOverflow className="image-frame">
+                        <Box className="product-sale">{sizeVolume}</Box>
+                        <AspectRatio ratio="1">
+                          <img src={imagePath} alt={product.productName} />
+                        </AspectRatio>
+                      </CardOverflow>
 
-                  <CardOverflow className="product-detail">
-                    <Typography level="body-sm">{dish.productName}</Typography>
-                    <Divider width="1" height="16" bg="#d5d5d5" />
-                    <Typography level="body-sm">$12</Typography>
-                    <Box className="view-count">
-                      <Typography level="body-sm">20</Typography>
-                      <VisibilityIcon />
-                    </Box>
-                  </CardOverflow>
-                </Card>
-              ))}
+                      <CardOverflow variant="soft" className="product-detail">
+                        <Stack className="info">
+                          <Stack direction="row">
+                            <Typography className="title">
+                              {product.productName}
+                            </Typography>
+                            <Divider width="2" height="24" bg="#d9d9d9" />
+                            <Typography className="price">
+                              ${product.productPrice}
+                            </Typography>
+                          </Stack>
+                          <Stack className="view-count">
+                            <Typography className="views">
+                              {product.productViews ?? 0}
+                              <VisibilityIcon
+                                sx={{ fontSize: 20, marginLeft: "5px" }}
+                              />
+                            </Typography>
+                          </Stack>
+                        </Stack>
+                      </CardOverflow>
+                    </Card>
+                  );
+                })
+              ) : (
+                <Box className="no-data">New dishes are not available!</Box>
+              )}
             </CssVarsProvider>
           </Stack>
         </Stack>
