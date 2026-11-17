@@ -38,6 +38,7 @@ class Test extends Component {
   render() {
     return (
       <div>
+        {/* Ford/Mustang details are hidden for now.
         <h1>My {this.state.brand}</h1>
         <p>
           Color: {this.state.color} - Model: {this.state.model} from{" "}
@@ -46,6 +47,7 @@ class Test extends Component {
         <button type="button" onClick={this.changeDetail}>
           Change Detail
         </button>
+        */}
       </div>
     );
   }

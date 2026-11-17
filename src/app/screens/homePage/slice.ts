@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { HomePageState } from "../../../types/screen";
+import { HomePageState } from "../../../lib/types/screen";
 
 const initialState: HomePageState = {
   popularDishes: [],
@@ -16,7 +16,7 @@ const homePageSlice = createSlice({
     },
     setNewDishes: (state, action) => {
       state.newDishes = action.payload;
-    },
+    },  
     setTopUsers: (state, action) => {
       state.topUsers = action.payload;
     },

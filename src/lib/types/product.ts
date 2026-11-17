@@ -1,4 +1,4 @@
-import { ProductCollection, ProductSize, ProductStatus } from "../lib/enums/product.enum";
+import { ProductCollection, ProductSize, ProductStatus } from "../enums/product.enum";
 
 export interface Product { // Shape of a product read from the database and returned by the service.
   _id: string; // MongoDB-generated ID for this product.
