@@ -5,6 +5,24 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import { addCartItem } from "../../../lib/data/cart";
 import "../../../css/products.css";
 
+import { useDispatch, useSelector } from "react-redux";
+import { Dispatch } from "@reduxjs/toolkit";
+import { setProducts } from "./slice";
+import { createSelector } from "reselect";
+import { retrieveProducts } from "./selector";
+import { Product } from "../../../lib/types/product";
+
+/** REDUX SLICE & SELECTOR */
+const actionDispatch = (dispatch: Dispatch) => ({
+  setProducts: (data: Product[]) => dispatch(setProducts(data)),
+});
+
+const productsRetriever = createSelector(
+  retrieveProducts,
+  (products) => ({
+    products,
+  }),
+);
 export type MenuProduct = {
   id: string;
   name: string;
@@ -101,7 +119,7 @@ const familyBrands = [
   { name: "CZN Burak Sweets", image: "/img/sweets.webp" },
   { name: "CZN Burak Doner", image: "/img/doner.webp" },
 ];
-const productsPerPage = 4;
+const productsPerPage = 8;
 
 export default function Products() {
   const [activeCategory, setActiveCategory] = useState("Dish");
