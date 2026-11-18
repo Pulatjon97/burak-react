@@ -17,15 +17,18 @@ import { ProductCollection } from "../../../lib/enums/product.enum";
 
 /** REDUX SLICE & SELECTOR */
 
+// Select and memoize the newest-products list from the homePage Redux state.
 const newDishesRetriever = createSelector(retrieveNewDishes, (newDishes) => ({
   newDishes,
 }));
 
 export default function NewDishes() {
+  // STEP 10: Read Redux state; a new array triggers a fresh card render.
   const { newDishes } = useSelector(newDishesRetriever);
 
   console.log("newDishes:", newDishes);
 
+  // Display the newest products as Fresh Menu cards.
   return (
     <div className="new-products-frame">
       <Container>
@@ -34,11 +37,14 @@ export default function NewDishes() {
 
           <Stack className="cards-frame">
             <CssVarsProvider>
+              {/* Show the empty state or map each API product into a card. */}
               {newDishes.length !== 0 ? (
                 newDishes.map((product: Product) => {
+                  // STEP 11: Build a browser URL for the first uploaded product image.
                   const imagePath = product.productImages?.[0]
                     ? `${serverApi}/${product.productImages[0]}`
                     : "";
+                  // Display drink volume or dish size in the badge.
                   const sizeVolume =
                     product.productCollection === ProductCollection.DRINK
                       ? product.productVolume
@@ -47,6 +53,7 @@ export default function NewDishes() {
                       : product.productSize
                         ? `${product.productSize} size`
                         : "Normal size";
+                  // The card uses live name, size, price, image, and view fields.
                   return (
                     <Card key={product._id} variant="outlined" className="card">
                       <CardOverflow className="image-frame">

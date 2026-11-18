@@ -17,16 +17,18 @@ import { Product } from "../../../lib/types/product";
 
 /** REDUX SLICE & SELECTOR */
 
+// Build a memoized selector result so this component reads the popular list.
 const popularDishesRetriever = createSelector(
   retrievePopularDishes,
   (popularDishes) => ({ popularDishes }),
 );
 
 export default function PopularDishes() {
+  // STEP 10: Read the list; Redux changes cause this component to render again.
   const { popularDishes } = useSelector(popularDishesRetriever);
   // console.log("popularDishes: ", popularDishes);
 
- 
+  // This section displays the popular-product cards.
   return (
     <div className="popular-dishes-frame">
       <Container>
@@ -34,12 +36,15 @@ export default function PopularDishes() {
           <Box className="category-title">Popular Dishes</Box>
 
           <Stack className="cards-frame">
+            {/* Empty data gets a message; otherwise map each product into a card. */}
             {popularDishes.length !== 0 ? (
               popularDishes.map((product: Product) => {
+                // STEP 11: Join the backend base URL to the stored image path.
                 const imagePath = product.productImages?.[0]
                   ? `${serverApi}/${product.productImages[0]}`
                   : "";
 
+                // Product fields supply the image, name, views, and description.
                 return (
                   <CssVarsProvider key={product._id}>
                     <Card className={"card"}>

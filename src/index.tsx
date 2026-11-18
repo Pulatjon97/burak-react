@@ -16,15 +16,20 @@ import "./css/index.css";
 
 const container = document.getElementById("root");
 
+// STEP 2: Find the HTML mount point where the React application will appear.
 if (!container) {
   throw new Error('Root element "#root" was not found.');
 }
 
+// Create the React 18 root before rendering the application tree.
 const root = createRoot(container);
 
+// STEP 3: Provide Redux, Material/Joy themes, and routing to every screen.
 root.render(
   <React.StrictMode>
+    {/* Redux Provider makes the shared store available to components. */}
     <Provider store={store}>
+      {/* Theme providers and router wrap the complete application. */}
       <ThemeProvider theme={{ [MATERIAL_THEME_ID]: theme }}>
         <CssVarsProvider>
           <CssBaseline />
@@ -37,4 +42,5 @@ root.render(
   </React.StrictMode>
 );
 
+// Collect optional performance metrics after the app has been mounted.
 reportWebVitals();

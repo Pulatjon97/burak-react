@@ -304,10 +304,6 @@
   object-position: center top;
 }
 
-.homepage .active-users-frame .cards-frame .member-image img.member-image-kim {
-  object-position: center 25%;
-}
-
 .homepage .active-users-frame .cards-frame .member-nickname {
   min-height: 24px;
   display: flex;
