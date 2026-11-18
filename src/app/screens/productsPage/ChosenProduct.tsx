@@ -1,43 +1,16 @@
 import { useRef, useState } from "react";
 import { Box, Button, Container, Stack } from "@mui/material";
-import { useParams, Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import Rating from "@mui/material/Rating";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
+import { useSelector } from "react-redux";
 import { addCartItem } from "../../../lib/data/cart";
-import { menuProducts } from "./Products";
+import { serverApi } from "../../../lib/config";
+import { Product } from "../../../lib/types/product";
+import { retrieveProducts } from "./selector";
 import "swiper/css";
 
-
-import { useDispatch, useSelector } from "react-redux";
-import { Dispatch } from "@reduxjs/toolkit";
-import { setRestaurant, setChosenProduct } from "./slice";
-import { createSelector } from "reselect";
-import {
-  retrieveChosenProduct,
-  retrieveRestaurant,
-} from "./selector";
-import { Product } from "../../../lib/types/product";
-
-/** REDUX SLICE & SELECTOR */
-const actionDispatch = (dispatch: Dispatch) => ({
-  setRestaurant: (data: Product[]) => dispatch(setRestaurant(data)),
-  setChosenProduct: (data: Product[]) => dispatch(setChosenProduct(data)),
-});
-
-const chosenProductRetriever = createSelector(
-  retrieveChosenProduct,
-  (chosenProduct) => ({
-    chosenProduct,
-  })
-);
-
-const restaurantRetriever = createSelector(
-  retrieveRestaurant,
-  (restaurant) => ({
-    restaurant,
-  })
-);
 type SwiperInstance = {
   slidePrev: () => void;
   slideNext: () => void;
@@ -47,7 +20,8 @@ export default function ChosenProduct() {
   const { productId } = useParams<{ productId: string }>();
   const [added, setAdded] = useState(false);
   const swiperRef = useRef<SwiperInstance | null>(null);
-  const product = menuProducts.find((item) => item.id === productId);
+  const products = useSelector(retrieveProducts);
+  const product = products.find((item: Product) => item._id === productId);
 
   if (!product) {
     return (
@@ -58,9 +32,10 @@ export default function ChosenProduct() {
     );
   }
 
-  const productPhotos = [product.image, "/img/cutlet.webp", "/img/kebab-fresh.webp"].filter(
-    (photo, index, photos) => photos.indexOf(photo) === index,
+  const productPhotos = (product.productImages ?? []).map((image) =>
+    image.startsWith("http") ? image : `${serverApi}/${image.replace(/^\/+/, "")}`,
   );
+  const mainImage = productPhotos[0] ?? "";
 
   return (
     <div className="chosen-product">
@@ -79,7 +54,7 @@ export default function ChosenProduct() {
                 <img
                   className="slider-image"
                   src={photo}
-                  alt={`${product.name}, view ${index + 1}`}
+                  alt={`${product.productName}, view ${index + 1}`}
                 />
               </SwiperSlide>
             ))}
@@ -107,32 +82,34 @@ export default function ChosenProduct() {
         </Stack>
         <Stack className="chosen-product-info">
           <Box className="info-box">
-            <strong className="product-name">{product.name}</strong>
+            <strong className="product-name">{product.productName}</strong>
             <span className="resto-name">Burak Restaurant</span>
             <Box className="rating-box">
               <Rating name="product-rating" defaultValue={2.5} precision={0.5} readOnly />
               <div className="evaluation-box">
                 <div className="product-view">
                   <RemoveRedEyeIcon sx={{ mr: "10px" }} />
-                  <span>20</span>
+                  <span>{product.productViews ?? 0}</span>
                 </div>
               </div>
             </Box>
-            <p className="product-desc">A delicious {product.name.toLowerCase()} made fresh by Burak Restaurant.</p>
+            <p className="product-desc">
+              {product.productDesc || `A delicious ${product.productName.toLowerCase()} made fresh by Burak Restaurant.`}
+            </p>
             <div className="product-divider" />
             <div className="product-price">
               <span>Price:</span>
-              <span>${product.price}</span>
+              <span>${product.productPrice}</span>
             </div>
             <div className="button-box">
               <Button
                 variant="contained"
                 onClick={() => {
                   addCartItem({
-                    id: product.id,
-                    name: product.name,
-                    price: product.price,
-                    image: product.image,
+                    id: product._id,
+                    name: product.productName,
+                    price: product.productPrice,
+                    image: mainImage,
                   });
                   setAdded(true);
                 }}

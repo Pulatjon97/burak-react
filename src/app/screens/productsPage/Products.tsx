@@ -1,7 +1,10 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import VisibilityIcon from "@mui/icons-material/Visibility";
+import { Badge, Box, Button, Pagination, PaginationItem, Stack } from "@mui/material";
+import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
+import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { addCartItem } from "../../../lib/data/cart";
 import "../../../css/products.css";
 
@@ -11,6 +14,9 @@ import { setProducts } from "./slice";
 import { createSelector } from "reselect";
 import { retrieveProducts } from "./selector";
 import { Product } from "../../../lib/types/product";
+import ProductService from "../../services/ProductService";
+import { ProductCollection } from "../../../lib/enums/product.enum";
+import { serverApi } from "../../../lib/config";
 
 /** REDUX SLICE & SELECTOR */
 const actionDispatch = (dispatch: Dispatch) => ({
@@ -19,99 +25,8 @@ const actionDispatch = (dispatch: Dispatch) => ({
 
 const productsRetriever = createSelector(
   retrieveProducts,
-  (products) => ({
-    products,
-  }),
+  (products) => ({ products }),
 );
-export type MenuProduct = {
-  id: string;
-  name: string;
-  category: string;
-  price: number;
-  image: string;
-};
-
-export const menuProducts: MenuProduct[] = [
-  {
-    id: "korean-spicy-soup",
-    name: "Korean Spicy Soup",
-    category: "Dish",
-    price: 15,
-    image: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=640&q=85",
-  },
-  {
-    id: "korean-spicy-soup",
-    name: "Korean Spicy Soup",
-    category: "Dish",
-    price: 15,
-    image: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=640&q=85",
-  },
-  {
-    id: "korean-spicy-soup",
-    name: "Korean Spicy Soup",
-    category: "Dish",
-    price: 15,
-    image: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=640&q=85",
-  },
-  {
-    id: "korean-spicy-soup",
-    name: "Korean Spicy Soup",
-    category: "Dish",
-    price: 15,
-    image: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=640&q=85",
-  },
-  {
-    id: "korean-spicy-soup",
-    name: "Korean Spicy Soup",
-    category: "Dish",
-    price: 15,
-    image: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=640&q=85",
-  },
-  {
-    id: "korean-spicy-soup",
-    name: "Korean Spicy Soup",
-    category: "Dish",
-    price: 15,
-    image: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=640&q=85",
-  },
-  {
-    id: "korean-spicy-soup",
-    name: "Korean Spicy Soup",
-    category: "Dish",
-    price: 15,
-    image: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=640&q=85",
-  },
-  {
-    id: "korean-spicy-soup",
-    name: "Korean Spicy Soup",
-    category: "Dish",
-    price: 15,
-    image: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=640&q=85",
-  },
-  {
-    id: "korean-spicy-soup",
-    name: "Korean Spicy Soup",
-    category: "Dish",
-    price: 15,
-    image: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=640&q=85",
-  },
-  {
-    id: "korean-spicy-soup",
-    name: "Korean Spicy Soup",
-    category: "Dish",
-    price: 15,
-    image: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=640&q=85",
-  },
-  {
-    id: "korean-spicy-soup",
-    name: "Korean Spicy Soup",
-    category: "Dish",
-    price: 15,
-    image: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=640&q=85",
-  },
- 
-];
-
 const categories = ["Dish", "Salad", "Drink", "Dessert", "Other"];
 const familyBrands = [
   { name: "CZN Burak Gurme", image: "/img/gurme.webp" },
@@ -122,6 +37,24 @@ const familyBrands = [
 const productsPerPage = 8;
 
 export default function Products() {
+  const dispatch = useDispatch();
+  const { setProducts } = useMemo(() => actionDispatch(dispatch), [dispatch]);
+  const { products } = useSelector(productsRetriever);
+
+  useEffect(() => {
+    const product = new ProductService();
+    product
+      .getProducts({
+        page: 1,
+        limit: 8,
+        order: "createdAt",
+        productCollection: ProductCollection.DISH,
+        search: "",
+      })
+      .then((data) => setProducts(data))
+      .catch((err) => console.log(err));
+  }, [setProducts]);
+
   const [activeCategory, setActiveCategory] = useState("Dish");
   const [query, setQuery] = useState("");
   const [sortByPrice, setSortByPrice] = useState(false);
@@ -130,19 +63,30 @@ export default function Products() {
   const [cartStatus, setCartStatus] = useState("");
 
   const visibleProducts = useMemo(() => {
-    const filtered = menuProducts.filter((product) => {
+    const filtered = products.filter((product: Product) => {
+      const productCategory = {
+        [ProductCollection.DISH]: "Dish",
+        [ProductCollection.SALAD]: "Salad",
+        [ProductCollection.DRINK]: "Drink",
+        [ProductCollection.DESSERT]: "Dessert",
+        [ProductCollection.OTHER]: "Other",
+      }[product.productCollection];
       const matchesCategory =
-        activeCategory === "Dish" || product.category === activeCategory;
-      const matchesQuery = product.name
+        activeCategory === "Dish" || productCategory === activeCategory;
+      const matchesQuery = product.productName
         .toLowerCase()
         .includes(query.trim().toLowerCase());
       return matchesCategory && matchesQuery;
     });
 
-    if (sortByPrice) return [...filtered].sort((a, b) => a.price - b.price);
-    if (sortByViews) return [...filtered].reverse();
+    if (sortByPrice)
+      return [...filtered].sort((a, b) => a.productPrice - b.productPrice);
+    if (sortByViews)
+      return [...filtered].sort(
+        (a, b) => (b.productViews ?? 0) - (a.productViews ?? 0),
+      );
     return filtered;
-  }, [activeCategory, query, sortByPrice, sortByViews]);
+  }, [products, activeCategory, query, sortByPrice, sortByViews]);
 
   const pageCount = Math.max(1, Math.ceil(visibleProducts.length / productsPerPage));
   const paginatedProducts = visibleProducts.slice(
@@ -224,82 +168,109 @@ export default function Products() {
             </div>
 
             <div className="product-grid">
-              {paginatedProducts.map((product) => (
-                <article className="menu-product" key={product.id}>
-                  <div className="menu-product-image">
-                    <span className="new-badge">Normal size</span>
-                    <img src={product.image} alt={product.name} loading="lazy" />
-                    <div className="product-hover-actions">
-                      <button
-                        type="button"
-                        className="add-to-basket"
-                        aria-label={`Add ${product.name} to basket`}
-                        onClick={() => {
-                          addCartItem({
-                            id: product.id,
-                            name: product.name,
-                            price: product.price,
-                            image: product.image,
-                          });
-                          setCartStatus(`${product.name} added to basket`);
-                        }}
+              {visibleProducts.length !== 0 ? (
+                paginatedProducts.map((product: Product) => {
+                  const firstImage = product.productImages?.[0] ?? "";
+                  const imagePath = firstImage.startsWith("http")
+                    ? firstImage
+                    : firstImage
+                      ? `${serverApi}/${firstImage.replace(/^\/+/, "")}`
+                      : "";
+                  const sizeVolume =
+                    product.productCollection === ProductCollection.DRINK
+                      ? product.productVolume
+                        ? `${product.productVolume} litre`
+                        : ""
+                      : product.productSize
+                        ? `${product.productSize} size`
+                        : "Normal size";
+
+                  return (
+                    <Stack
+                      component="article"
+                      key={product._id}
+                      className="menu-product product-card"
+                    >
+                      <Stack
+                        className="menu-product-image product-img"
+                        role="img"
+                        aria-label={product.productName}
+                        sx={{ backgroundImage: imagePath ? `url(${imagePath})` : "none" }}
                       >
-                        <ShoppingCartIcon aria-hidden="true" />
-                      </button>
-                      <div className="product-views" aria-label="20 views">
-                        <span>20</span>
-                        <VisibilityIcon aria-hidden="true" />
-                      </div>
-                    </div>
-                  </div>
-                  <Link className="menu-product-link" to={`/products/${product.id}`}>
-                    <div className="menu-product-info">
-                      <span className="product-name">{product.name}</span>
-                      <span className="product-price">
-                        <span className="price-coin" aria-hidden="true">$</span>
-                        <span>{product.price}</span>
-                      </span>
-                    </div>
-                  </Link>
-                </article>
-              ))}
-              {visibleProducts.length === 0 && (
+                        <Box className="product-sale new-badge">{sizeVolume}</Box>
+                        <Box className="product-hover-actions">
+                          <Button
+                            type="button"
+                            className="add-to-basket shop-btn"
+                            aria-label={`Add ${product.productName} to basket`}
+                            onClick={() => {
+                              addCartItem({
+                                id: product._id,
+                                name: product.productName,
+                                price: product.productPrice,
+                                image: imagePath,
+                              });
+                              setCartStatus(`${product.productName} added to basket`);
+                            }}
+                          >
+                            <img
+                              src="/icons/shopping-cart.svg"
+                              style={{ display: "flex" }}
+                              alt=""
+                            />
+                          </Button>
+                          <Button
+                            type="button"
+                            className="product-views view-btn"
+                            aria-label={`${product.productViews ?? 0} views`}
+                          >
+                            <Badge badgeContent={product.productViews ?? 0} color="secondary">
+                              <RemoveRedEyeIcon
+                                sx={{
+                                  color: (product.productViews ?? 0) === 0 ? "gray" : "white",
+                                }}
+                              />
+                            </Badge>
+                          </Button>
+                        </Box>
+                      </Stack>
+                      <Link className="menu-product-link" to={`/products/${product._id}`}>
+                        <Box className="menu-product-info product-desc">
+                          <span className="product-name product-title">
+                            {product.productName}
+                          </span>
+                          <Box className="product-price">
+                            <MonetizationOnIcon aria-hidden="true" />
+                            <span>{product.productPrice}</span>
+                          </Box>
+                        </Box>
+                      </Link>
+                    </Stack>
+                  );
+                })
+              ) : (
                 <p className="no-products">No menu items match your search.</p>
               )}
             </div>
             <span className="sr-only" aria-live="polite">{cartStatus}</span>
             {visibleProducts.length > 0 && (
-              <nav className="products-pagination" aria-label="Product pages">
-                <button
-                  type="button"
-                  aria-label="Previous page"
-                  disabled={currentPage === 1}
-                  onClick={() => setCurrentPage((page) => Math.max(1, page - 1))}
-                >
-                  ←
-                </button>
-                {Array.from({ length: pageCount }, (_, index) => index + 1).map(
-                  (page) => (
-                    <button
-                      type="button"
-                      key={page}
-                      className={currentPage === page ? "active" : ""}
-                      aria-current={currentPage === page ? "page" : undefined}
-                      onClick={() => setCurrentPage(page)}
-                    >
-                      {page}
-                    </button>
-                  ),
-                )}
-                <button
-                  type="button"
-                  aria-label="Next page"
-                  disabled={currentPage === pageCount}
-                  onClick={() => setCurrentPage((page) => Math.min(pageCount, page + 1))}
-                >
-                  →
-                </button>
-              </nav>
+              <Stack className="products-pagination pagination-section">
+                <Pagination
+                  count={pageCount}
+                  page={currentPage}
+                  onChange={(_event, page) => setCurrentPage(page)}
+                  renderItem={(item) => (
+                    <PaginationItem
+                      slots={{
+                        previous: ArrowBackIcon,
+                        next: ArrowForwardIcon,
+                      }}
+                      {...item}
+                      color="secondary"
+                    />
+                  )}
+                />
+              </Stack>
             )}
           </div>
         </div>
