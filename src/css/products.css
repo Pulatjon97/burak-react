@@ -87,13 +87,13 @@
 }
 
 .category-rail button {
+  box-sizing: border-box;
   width: 38px;
+  min-width: 0;
   min-height: 68px;
   padding: 7px 3px;
   border: 1px solid #d7b686;
   border-radius: 6px;
-  background: #e8c999;
-  color: #3b3329;
   cursor: pointer;
   font-size: 12px;
   font-weight: 700;
@@ -103,11 +103,6 @@
   transform: rotate(180deg);
 }
 
-.category-rail button.active {
-  border-color: #343434;
-  background: #343434;
-  color: #fff;
-}
 
 .products-content {
   min-width: 0;
@@ -160,6 +155,9 @@
   aspect-ratio: 1;
   border-radius: 0 48px 0 0;
   background: #e5e5e5;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
 }
 
 .menu-product-image img {
@@ -187,10 +185,12 @@
   opacity: 1;
 }
 
-.add-to-basket {
+.menu-product-image .product-hover-actions .add-to-basket.shop-btn {
   position: absolute;
-  bottom: 10%;
-  left: 50%;
+  top: auto;
+  right: auto;
+  bottom: 14px;
+  left: 14px;
   display: inline-flex;
   width: 60px;
   height: 54px;
@@ -201,49 +201,61 @@
   background: #ad18bd;
   color: #fff;
   cursor: pointer;
-  transform: translateX(-50%);
+  margin: 0;
+  transform: none;
   transition: transform 160ms ease, background-color 160ms ease;
 }
 
-.add-to-basket:hover {
-  transform: translate(-50%, -2px);
+.menu-product-image .product-hover-actions .add-to-basket.shop-btn:hover {
+  transform: translateY(-2px);
   background: #9510a4;
 }
 
-.add-to-basket svg {
+.menu-product-image .product-hover-actions .add-to-basket.shop-btn img {
+  width: 30px;
+  height: 30px;
+}
+
+.menu-product-image .product-hover-actions .add-to-basket.shop-btn svg {
   font-size: 29px;
 }
 
-.product-views {
+.menu-product-image .product-hover-actions .product-views.view-btn {
   position: absolute;
-  right: 7%;
-  bottom: 8%;
+  top: auto;
+  right: 14px;
+  bottom: 14px;
+  left: auto;
+  display: inline-flex;
   width: 64px;
   height: 56px;
+  min-width: 64px;
+  margin: 0;
+  padding: 0;
   color: #e3e3e3;
   font: 17px Arial, sans-serif;
 }
 
-.product-views span {
-  position: absolute;
-  top: 0;
-  right: 0;
+.product-views .MuiBadge-root {
   display: flex;
-  width: 44px;
-  height: 36px;
   align-items: center;
   justify-content: center;
+}
+
+.product-views .MuiBadge-badge {
+  top: -8px;
+  right: -12px;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 5px;
   border-radius: 50%;
   background: #e6c798;
   color: #343434;
 }
 
-.product-views svg {
-  position: absolute;
-  bottom: 1px;
-  left: 0;
-  width: 39px;
-  height: 29px;
+.product-views .MuiSvgIcon-root {
+  width: 28px;
+  height: 28px;
   filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.35));
 }
 
