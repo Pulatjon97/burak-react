@@ -1,6 +1,7 @@
 import axios from "axios";
 import { serverApi } from "../../lib/config";
 import { Product, ProductInquiry } from "../../lib/types/product";
+import { Member } from "../../lib/types/member";
 
 // STEP 5: Keep product API requests in one service instead of inside UI cards.
 class ProductService {
@@ -29,6 +30,30 @@ class ProductService {
       return result.data;
     } catch (err) {
       // Log the network/API failure and let HomePage's catch handler see it too.
+      console.log("Error, getProduct: ", err);
+      throw err;
+    }
+  }
+
+  public async getProduct(productId: string): Promise<Product> {
+    try {
+      const url = `${this.path}/product/${productId}`;
+      const result = await axios.get(url, { withCredentials: true });
+      console.log("getProduct:", result);
+      return result.data;
+    } catch (err) {
+      console.log("Error, getProduct: ", err);
+      throw err;
+    }
+  }
+
+  public async getRestaurant(productId: string): Promise<Member> {
+    try {
+      const url = `${this.path}/product/restaurant`;
+      const result = await axios.get(url, { withCredentials: true });
+      console.log("getRestaurant:", result);
+      return result.data;
+    } catch (err) {
       console.log("Error, getProduct: ", err);
       throw err;
     }
