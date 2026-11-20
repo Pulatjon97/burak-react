@@ -37,24 +37,36 @@ class ProductService {
 
   public async getProduct(productId: string): Promise<Product> {
     try {
+      // Add the selected product ID to the API route so a refresh can reload details from the database.
       const url = `${this.path}/product/${productId}`;
+      // Include the browser session cookie so the backend can associate this view with a signed-in member.
       const result = await axios.get(url, { withCredentials: true });
+      // Log the full response while developing; Axios stores the JSON response body in result.data.
       console.log("getProduct:", result);
+      // Return the product body to the component, which saves it in Redux.
       return result.data;
     } catch (err) {
+      // Log the network or server error before passing it back to the component's catch handler.
       console.log("Error, getProduct: ", err);
+      // Re-throw so the caller can decide how to display or handle the failure.
       throw err;
     }
   }
 
   public async getRestaurant(productId: string): Promise<Member> {
     try {
+      // This endpoint returns the restaurant profile shown beside a product's details.
       const url = `${this.path}/product/restaurant`;
+      // Send the request with the browser session cookie, matching the detail request behavior.
       const result = await axios.get(url, { withCredentials: true });
+      // Keep the response visible in the developer console during development.
       console.log("getRestaurant:", result);
+      // Return the restaurant JSON body to the caller.
       return result.data;
     } catch (err) {
+      // Record the failed profile request so it can be diagnosed.
       console.log("Error, getProduct: ", err);
+      // Let the component handle the rejected request as well.
       throw err;
     }
   }

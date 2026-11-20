@@ -1,18 +1,36 @@
 export type CartItem = {
   id: string;
+  quantity: number;
   name: string;
   price: number;
   image: string;
-  quantity: number;
 };
 
-const cartStorageKey = "burak-cart";
+const cartStorageKey = "cartData";
 const cartChangedEvent = "burak-cart-change";
 
 export function getCartItems(): CartItem[] {
   try {
     const savedCart = window.localStorage.getItem(cartStorageKey);
-    return savedCart ? (JSON.parse(savedCart) as CartItem[]) : [];
+    if (!savedCart) return [];
+
+    const items = JSON.parse(savedCart) as CartItem[];
+    if (!Array.isArray(items)) return [];
+
+    // Keep the cartData field order consistent with the tutorial: id, quantity, name.
+    const orderedItems = items.map(({ id, quantity, name, price, image }) => ({
+      id,
+      quantity,
+      name,
+      price,
+      image,
+    }));
+    const orderedCart = JSON.stringify(orderedItems);
+    if (orderedCart !== savedCart) {
+      window.localStorage.setItem(cartStorageKey, orderedCart);
+    }
+
+    return orderedItems;
   } catch {
     return [];
   }
@@ -20,7 +38,14 @@ export function getCartItems(): CartItem[] {
 
 function saveCart(items: CartItem[]) {
   try {
-    window.localStorage.setItem(cartStorageKey, JSON.stringify(items));
+    const orderedItems = items.map(({ id, quantity, name, price, image }) => ({
+      id,
+      quantity,
+      name,
+      price,
+      image,
+    }));
+    window.localStorage.setItem(cartStorageKey, JSON.stringify(orderedItems));
     window.dispatchEvent(new Event(cartChangedEvent));
   } catch {
     // Keep the page usable when browser storage is unavailable.

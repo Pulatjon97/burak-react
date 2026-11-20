@@ -30,12 +30,18 @@ class MemberService {
 
   public async getRestaurant(): Promise<Member> {
     try {
+      // Build the API URL for the restaurant profile shown on the product-detail page.
       const url = this.path + "/member/restaurant";
+      // Request the restaurant record; Axios places the returned JSON in result.data.
       const result = await axios.get(url);
+      // Log the response so the profile data can be inspected during development.
       console.log("getRestaurant:", result);
+      // Return the restaurant object to the component so it can dispatch it into Redux.
       return result.data;
     } catch (err) {
+      // Print the failure in the browser console for diagnosis.
       console.log("Error, getRestaurant:", err);
+      // Keep the promise rejected so the component can handle the failure too.
       throw err;
     }
   }

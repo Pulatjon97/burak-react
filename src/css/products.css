@@ -142,14 +142,15 @@
   gap: 26px 22px;
 }
 
-.menu-product {
+.product-card {
   min-width: 0;
   border-radius: 0;
   color: inherit;
   text-decoration: none;
+  cursor: pointer;
 }
 
-.menu-product-image {
+.product-img {
   position: relative;
   overflow: hidden;
   aspect-ratio: 1;
@@ -160,7 +161,7 @@
   background-size: contain;
 }
 
-.menu-product-image img {
+.product-img img {
   display: block;
   width: 100%;
   height: 100%;
@@ -168,7 +169,7 @@
   transition: transform 180ms ease;
 }
 
-.menu-product:hover .menu-product-image img {
+.product-card:hover .product-img img {
   transform: scale(1.035);
 }
 
@@ -180,12 +181,12 @@
   transition: opacity 160ms ease;
 }
 
-.menu-product:hover .product-hover-actions,
-.menu-product:focus-within .product-hover-actions {
+.product-card:hover .product-hover-actions,
+.product-card:focus-within .product-hover-actions {
   opacity: 1;
 }
 
-.menu-product-image .product-hover-actions .add-to-basket.shop-btn {
+.product-img .product-hover-actions .shop-btn {
   position: absolute;
   top: auto;
   right: auto;
@@ -206,21 +207,21 @@
   transition: transform 160ms ease, background-color 160ms ease;
 }
 
-.menu-product-image .product-hover-actions .add-to-basket.shop-btn:hover {
+.product-img .product-hover-actions .shop-btn:hover {
   transform: translateY(-2px);
   background: #9510a4;
 }
 
-.menu-product-image .product-hover-actions .add-to-basket.shop-btn img {
+.product-img .product-hover-actions .shop-btn img {
   width: 30px;
   height: 30px;
 }
 
-.menu-product-image .product-hover-actions .add-to-basket.shop-btn svg {
+.product-img .product-hover-actions .shop-btn svg {
   font-size: 29px;
 }
 
-.menu-product-image .product-hover-actions .product-views.view-btn {
+.product-img .product-hover-actions .view-btn {
   position: absolute;
   top: auto;
   right: 14px;
@@ -236,13 +237,13 @@
   font: 17px Arial, sans-serif;
 }
 
-.product-views .MuiBadge-root {
+.view-btn .MuiBadge-root {
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.product-views .MuiBadge-badge {
+.view-btn .MuiBadge-badge {
   top: -8px;
   right: -12px;
   min-width: 20px;
@@ -253,19 +254,13 @@
   color: #343434;
 }
 
-.product-views .MuiSvgIcon-root {
+.view-btn .MuiSvgIcon-root {
   width: 28px;
   height: 28px;
   filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.35));
 }
 
-.menu-product-link {
-  display: block;
-  color: inherit;
-  text-decoration: none;
-}
-
-.new-badge {
+.product-card .product-sale {
   position: absolute;
   z-index: 1;
   top: 12px;
@@ -279,7 +274,7 @@
   text-transform: uppercase;
 }
 
-.menu-product-info {
+.product-card > .product-desc {
   display: flex;
   min-height: 96px;
   flex-direction: column;
@@ -291,7 +286,7 @@
   font-family: "Roboto Serif", Georgia, serif;
 }
 
-.product-name {
+.product-card .product-title {
   max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -366,12 +361,12 @@
 }
 
 @media (max-width: 700px) {
-  .menu-product-info {
+  .product-card > .product-desc {
     min-height: 76px;
     gap: 5px;
   }
 
-  .product-name {
+  .product-card .product-title {
     font-size: 15px;
   }
 

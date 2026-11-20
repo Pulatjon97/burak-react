@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import {
   Badge,
   Box,
@@ -105,8 +105,8 @@ export default function Products() {
   };
 
   const chooseDishHandler = (id: string) => {
-history.push(`/products/${id}`);
-  }
+    history.push(`/products/${id}`);
+  };
 
   const visibleProducts = useMemo(() => {
     const filtered = products.filter((product: Product) => {
@@ -251,12 +251,22 @@ history.push(`/products/${id}`);
                     return (
                       <Stack
                         component="article"
-                        className="menu-product product-card"
+                        className="product-card"
                         key={product._id}
+                        tabIndex={0}
+                        aria-label={`${product.productName}, ${product.productPrice}`}
                         onClick={() => chooseDishHandler(product._id)}
+                        onKeyDown={(event) => {
+                          if (
+                            event.target === event.currentTarget &&
+                            event.key === "Enter"
+                          ) {
+                            chooseDishHandler(product._id);
+                          }
+                        }}
                       >
                         <Stack
-                          className="menu-product-image product-img"
+                          className="product-img"
                           role="img"
                           aria-label={product.productName}
                           sx={{
@@ -265,15 +275,14 @@ history.push(`/products/${id}`);
                               : "none",
                           }}
                         >
-                          <Box className="product-sale new-badge">
-                            {sizeVolume}
-                          </Box>
+                          <div className="product-sale">{sizeVolume}</div>
                           <Box className="product-hover-actions">
                             <Button
                               type="button"
-                              className="add-to-basket shop-btn"
+                              className="shop-btn"
                               aria-label={`Add ${product.productName} to basket`}
-                              onClick={() => {
+                              onClick={(event) => {
+                                event.stopPropagation();
                                 addCartItem({
                                   id: product._id,
                                   name: product.productName,
@@ -293,8 +302,9 @@ history.push(`/products/${id}`);
                             </Button>
                             <Button
                               type="button"
-                              className="product-views view-btn"
+                              className="view-btn"
                               aria-label={`${product.productViews ?? 0} views`}
+                              onClick={(event) => event.stopPropagation()}
                             >
                               <Badge
                                 badgeContent={product.productViews ?? 0}
@@ -312,20 +322,15 @@ history.push(`/products/${id}`);
                             </Button>
                           </Box>
                         </Stack>
-                        <Link
-                          className="menu-product-link"
-                          to={`/products/${product._id}`}
-                        >
-                          <Box className="menu-product-info product-desc">
-                            <span className="product-name product-title">
-                              {product.productName}
-                            </span>
-                            <Box className="product-price">
-                              <MonetizationOnIcon aria-hidden="true" />
-                              <span>{product.productPrice}</span>
-                            </Box>
+                        <Box className="product-desc">
+                          <span className="product-title">
+                            {product.productName}
+                          </span>
+                          <Box className="product-price">
+                            <MonetizationOnIcon aria-hidden="true" />
+                            <span>{product.productPrice}</span>
                           </Box>
-                        </Link>
+                        </Box>
                       </Stack>
                     );
                   })

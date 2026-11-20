@@ -1,23 +1,24 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Box, Button, IconButton, Badge, Menu, Stack } from "@mui/material";
 import CancelIcon from "@mui/icons-material/Cancel";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import {
   CartItem,
   changeCartItemQuantity,
-  getCartItems,
   removeCartItem,
-  subscribeToCart,
 } from "../../../lib/data/cart";
+import { serverApi } from "../../../lib/config";
 
-export default function Basket() {
+interface BasketProps {
+  cartItems: CartItem[];
+}
+ 
+export default function Basket(props: BasketProps) {
+  const { cartItems } = props;
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [items, setItems] = useState<CartItem[]>(getCartItems);
   const open = Boolean(anchorEl);
-  const itemCount = items.reduce((count, item) => count + item.quantity, 0);
-  const total = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
-
-  useEffect(() => subscribeToCart(() => setItems(getCartItems())), []);
+  const itemCount = cartItems.reduce((count, item) => count + item.quantity, 0);
+  const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -71,52 +72,64 @@ export default function Basket() {
       >
         <Stack className="basket-frame">
           <Box className="all-check-box">
-            {items.length ? "Cart Products:" : "Cart is empty!"}
+            {cartItems.length === 0 ? (
+              <div>Cart is empty!</div>
+            ) : (
+              <div>Cart Products:</div>
+            )}
           </Box>
 
-          {items.length > 0 && (
+          {cartItems.length > 0 && (
             <Box className="orders-main-wrapper">
               <Box className="orders-wrapper">
-                {items.map((item) => (
-                  <Box className="basket-info-box" key={item.id}>
-                    <button
-                      type="button"
-                      className="cancel-btn"
-                      aria-label={`Remove ${item.name} from basket`}
-                      onClick={() => removeCartItem(item.id)}
-                    >
-                      <CancelIcon fontSize="small" />
-                    </button>
-                    <img className="product-img" src={item.image} alt="" />
-                    <span className="product-name">{item.name}</span>
-                    <p className="product-price">
-                      ${item.price} × {item.quantity}
-                    </p>
-                    <div className="col-2">
+                {cartItems.map((item: CartItem) => {
+                  const imagePath = item.image.startsWith("http")
+                    ? item.image
+                    : `${serverApi}/${item.image.replace(/^\/+/, "")}`;
+
+                  return (
+                    <Box className="basket-info-box" key={item.id}>
                       <button
                         type="button"
-                        className="remove"
-                        aria-label={`Remove one ${item.name}`}
-                        onClick={() => changeCartItemQuantity(item.id, -1)}
+                        className="cancel-btn"
+                        aria-label={`Remove ${item.name} from basket`}
+                        onClick={() => removeCartItem(item.id)}
                       >
-                        −
+                        <CancelIcon color="primary" fontSize="small" />
                       </button>
-                      <button
-                        type="button"
-                        className="add"
-                        aria-label={`Add one ${item.name}`}
-                        onClick={() => changeCartItemQuantity(item.id, 1)}
-                      >
-                        +
-                      </button>
-                    </div>
-                  </Box>
-                ))}
+                      <img className="product-img" src={imagePath} alt={item.name} />
+                      <span className="product-name">{item.name}</span>
+                      <p className="product-price">
+                        ${item.price} × {item.quantity}
+                      </p>
+                      <Box sx={{ minWidth: 120 }}>
+                        <div className="col-2">
+                          <button
+                            type="button"
+                            className="remove"
+                            aria-label={`Remove one ${item.name}`}
+                            onClick={() => changeCartItemQuantity(item.id, -1)}
+                          >
+                            −
+                          </button>
+                          <button
+                            type="button"
+                            className="add"
+                            aria-label={`Add one ${item.name}`}
+                            onClick={() => changeCartItemQuantity(item.id, 1)}
+                          >
+                            +
+                          </button>
+                        </div>
+                      </Box>
+                    </Box>
+                  );
+                })}
               </Box>
             </Box>
           )}
 
-          {items.length > 0 && (
+          {cartItems.length > 0 && (
             <Box className="basket-order">
               <span className="price">Total: ${total.toFixed(2)}</span>
               <Button startIcon={<ShoppingCartIcon />} variant="contained">
