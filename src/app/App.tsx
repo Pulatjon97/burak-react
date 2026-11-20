@@ -1,9 +1,4 @@
-import React, { useEffect, useState } from "react";
-import logo from "./logo.svg";
-import Container from "@mui/material/Container";
-import { Box, Stack, Typography } from "@mui/material";
-import Button from "@mui/material/Button";
-import { Link, Route, Switch, useLocation } from "react-router-dom";
+import { Route, Switch, useLocation } from "react-router-dom";
 import HomePage from "./screens/homePage";
 import ProductsPage from "./screens/productsPage";
 import OrdersPage from "./screens/ordersPage";
@@ -17,31 +12,34 @@ import "../css/navbar.css";
 import "../css/footer.css";
 import "../css/home.css";
 import Test from "./screens/Test";
-import {
-  CartItem,
-  getCartItems,
-  subscribeToCart,
-} from "../lib/data/cart";
+import useBasket from "./hooks/useBasket";
 
 function App() {
   const location = useLocation();
-  const [cartItems, setCartItems] = useState<CartItem[]>(getCartItems);
-
-  useEffect(
-    () => subscribeToCart(() => setCartItems(getCartItems())),
-    [],
-  );
+  const { cartItems, onAdd, onRemove, onDelete, onDeleteAll } = useBasket();
 
   return (
     <>
       {location.pathname === "/" ? (
-        <HomeNavbar cartItems={cartItems} />
+        <HomeNavbar
+          cartItems={cartItems}
+          onAdd={onAdd}
+          onRemove={onRemove}
+          onDelete={onDelete}
+          onDeleteAll={onDeleteAll}
+        />
       ) : (
-        <OtherNavbar cartItems={cartItems} />
+        <OtherNavbar
+          cartItems={cartItems}
+          onAdd={onAdd}
+          onRemove={onRemove}
+          onDelete={onDelete}
+          onDeleteAll={onDeleteAll}
+        />
       )}
       <Switch>
         <Route path="/products">
-          <ProductsPage />
+          <ProductsPage onAdd={onAdd} />
         </Route>
         <Route path="/orders">
           <OrdersPage />

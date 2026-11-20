@@ -1,30 +1,38 @@
 import React, { useState } from "react";
 import { Box, Button, IconButton, Badge, Menu, Stack } from "@mui/material";
 import CancelIcon from "@mui/icons-material/Cancel";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import {
-  CartItem,
-  changeCartItemQuantity,
-  removeCartItem,
-} from "../../../lib/data/cart";
+import { CartItem } from "../../../lib/data/cart";
 import { serverApi } from "../../../lib/config";
 
 interface BasketProps {
   cartItems: CartItem[];
+  onAdd: (input: Omit<CartItem, "quantity">) => void;
+  onRemove: (item: CartItem) => void;
+  onDelete: (id: string) => void;
+  onDeleteAll: () => void;
 }
  
 export default function Basket(props: BasketProps) {
-  const { cartItems } = props;
+  const { cartItems, onAdd, onRemove, onDelete, onDeleteAll } = props;
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const itemCount = cartItems.reduce((count, item) => count + item.quantity, 0);
-  const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const itemsPrice: number = cartItems.reduce(
+    (sum: number, item: CartItem) => sum + item.quantity * item.price,
+    0
+  );
+  const shippingCost: number = itemsPrice < 100 ? 5 : 0;
+  const totalPrice = (itemsPrice + shippingCost).toFixed(1);
 
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(e.currentTarget);
   };
 
-  const handleClose = () => setAnchorEl(null);
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   return (
     <Box className="hover-line">
@@ -75,7 +83,16 @@ export default function Basket(props: BasketProps) {
             {cartItems.length === 0 ? (
               <div>Cart is empty!</div>
             ) : (
-              <div>Cart Products:</div>
+              <>
+                <div>Cart Products:</div>
+                {/* The trash icon clears all basket items through the shared hook. */}
+                <DeleteForeverIcon
+                  sx={{ ml: "5px", cursor: "pointer" }}
+                  color="primary"
+                  aria-label="Delete all basket items"
+                  onClick={onDeleteAll}
+                />
+              </>
             )}
           </Box>
 
@@ -93,7 +110,7 @@ export default function Basket(props: BasketProps) {
                         type="button"
                         className="cancel-btn"
                         aria-label={`Remove ${item.name} from basket`}
-                        onClick={() => removeCartItem(item.id)}
+                        onClick={() => onDelete(item.id)}
                       >
                         <CancelIcon color="primary" fontSize="small" />
                       </button>
@@ -108,7 +125,7 @@ export default function Basket(props: BasketProps) {
                             type="button"
                             className="remove"
                             aria-label={`Remove one ${item.name}`}
-                            onClick={() => changeCartItemQuantity(item.id, -1)}
+                            onClick={() => onRemove(item)}
                           >
                             −
                           </button>
@@ -116,7 +133,14 @@ export default function Basket(props: BasketProps) {
                             type="button"
                             className="add"
                             aria-label={`Add one ${item.name}`}
-                            onClick={() => changeCartItemQuantity(item.id, 1)}
+                            onClick={() =>
+                              onAdd({
+                                id: item.id,
+                                name: item.name,
+                                price: item.price,
+                                image: item.image,
+                              })
+                            }
                           >
                             +
                           </button>
@@ -129,13 +153,17 @@ export default function Basket(props: BasketProps) {
             </Box>
           )}
 
-          {cartItems.length > 0 && (
+          {cartItems.length !== 0 ? (
             <Box className="basket-order">
-              <span className="price">Total: ${total.toFixed(2)}</span>
+              <span className="price">
+                Total: ${totalPrice} ({itemsPrice} + {shippingCost})
+              </span>
               <Button startIcon={<ShoppingCartIcon />} variant="contained">
                 Order
               </Button>
             </Box>
+          ) : (
+            ""
           )}
         </Stack>
       </Menu>

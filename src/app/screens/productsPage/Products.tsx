@@ -12,7 +12,7 @@ import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import { addCartItem } from "../../../lib/data/cart";
+import type { CartItem } from "../../../lib/data/cart";
 import "../../../css/products.css";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -40,7 +40,11 @@ const familyBrands = [
   { name: "CZN Burak Sweets", image: "/img/sweets.webp" },
   { name: "CZN Burak Doner", image: "/img/doner.webp" },
 ];
-export default function Products() {
+interface ProductsProps {
+  onAdd: (input: Omit<CartItem, "quantity">) => void;
+}
+
+export default function Products({ onAdd }: ProductsProps) {
   const dispatch = useDispatch();
   const { setProducts } = useMemo(() => actionDispatch(dispatch), [dispatch]);
   const { products } = useSelector(productsRetriever);
@@ -283,7 +287,7 @@ export default function Products() {
                               aria-label={`Add ${product.productName} to basket`}
                               onClick={(event) => {
                                 event.stopPropagation();
-                                addCartItem({
+                                onAdd({
                                   id: product._id,
                                   name: product.productName,
                                   price: product.productPrice,

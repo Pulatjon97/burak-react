@@ -5,7 +5,7 @@ import { Swiper, SwiperSlide } from "swiper/react"; // Swiper displays each prod
 import Rating from "@mui/material/Rating"; // Shows the product's rating stars.
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye"; // Icon displayed beside the product view count.
 import { useDispatch, useSelector } from "react-redux"; // Redux hooks dispatch loaded data and read stored data.
-import { addCartItem } from "../../../lib/data/cart"; // Adds the selected product to the shopping basket.
+import type { CartItem } from "../../../lib/data/cart"; // Shared cart item type used by the basket hook.
 import { serverApi } from "../../../lib/config"; // Backend base URL used to build uploaded-photo URLs.
 import ProductService from "../../services/ProductService"; // Makes requests for product data.
 import MemberService from "../../services/MemberService"; // Makes requests for restaurant/member data.
@@ -23,7 +23,11 @@ type SwiperInstance = {
   slideNext: () => void; // Move the gallery to the next photo.
 };
 
-export default function ChosenProduct() {
+interface ChosenProductProps {
+  onAdd: (input: Omit<CartItem, "quantity">) => void;
+}
+
+export default function ChosenProduct({ onAdd }: ChosenProductProps) {
   const { productId } = useParams<{ productId: string }>(); // Read the chosen product's ID from a URL such as /products/abc123.
   const [added, setAdded] = useState(false); // Tracks whether this page has added this product to the basket.
   const [loading, setLoading] = useState(true); // Prevents a premature "Product not found" message while the API request is pending.
@@ -180,7 +184,7 @@ export default function ChosenProduct() {
               <Button
                 variant="contained"
                 onClick={() => {
-                  addCartItem({
+                  onAdd({
                     id: product._id,
                     name: product.productName,
                     price: product.productPrice,
