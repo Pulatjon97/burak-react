@@ -1,6 +1,6 @@
 import axios from "axios";
 import { serverApi } from "../../lib/config";
-import { Member } from "../../lib/types/member";
+import { Member, MemberInput } from "../../lib/types/member";
 
 // STEP 5: Keep the top-user API request separate from the ActiveUsers UI.
 class MemberService {
@@ -28,7 +28,7 @@ class MemberService {
     }
   }
 
-  public async getRestaurant(): Promise<Member> {
+  public async getRestaurant(): Promise<Member> { 
     try {
       // Build the API URL for the restaurant profile shown on the product-detail page.
       const url = this.path + "/member/restaurant";
@@ -36,7 +36,7 @@ class MemberService {
       const result = await axios.get(url);
       // Log the response so the profile data can be inspected during development.
       console.log("getRestaurant:", result);
-      // Return the restaurant object to the component so it can dispatch it into Redux.
+      // Return the restaurant object to t he component so it can dispatch it into Redux.
       return result.data;
     } catch (err) {
       // Print the failure in the browser console for diagnosis.
@@ -45,6 +45,24 @@ class MemberService {
       throw err;
     }
   }
+
+public async signup(input: MemberInput): Promise<Member> {
+  try {
+    const url = this.path + "/member/signup";
+    const result = await axios.post(url, input, { withCredentials: true });
+    console.log("signup:", result);
+
+    const member: Member = result.data.member;
+    console.log("member:", member);
+    localStorage.setItem("memberData", JSON.stringify(member));
+
+    return member;
+  } catch (err) {
+    console.log("Error, signup:", err);
+    throw err;
+  }
 }
 
-export default MemberService;
+} 
+ 
+export default MemberService; 
