@@ -13,6 +13,7 @@ import {
 import { BrowserRouter as Router } from "react-router-dom";
 import theme from "./app/MaterialTheme";
 import "./css/index.css";
+import ContextProvider from "./app/context/ContextProvider";
 
 const container = document.getElementById("root");
 
@@ -29,8 +30,8 @@ root.render(
   <React.StrictMode>
     {/* Redux Provider makes the shared store available to components. */}
     <Provider store={store}>
-      {/* Theme providers and router wrap the complete application. */}
-      <ThemeProvider theme={{ [MATERIAL_THEME_ID]: theme }}>
+      <ContextProvider>
+<ThemeProvider theme={{ [MATERIAL_THEME_ID]: theme }}>
         <CssVarsProvider>
           <CssBaseline />
           <Router>
@@ -38,6 +39,9 @@ root.render(
           </Router>
         </CssVarsProvider>
       </ThemeProvider>
+      </ContextProvider>
+      {/* Theme providers and router wrap the complete application. */}
+      
     </Provider>
   </React.StrictMode>
 );
